@@ -24,12 +24,15 @@ export default function LoginPage() {
       console.error("Login logging error:", error);
     }
 
-    await signIn("credentials", {
+    const result = await signIn("credentials", {
       email,
       password,
-      redirect: true,
-      callbackUrl: "/",
+      redirect: false,
     });
+
+    if (result?.ok) {
+      window.location.href = "/";
+    }
   };
 
   return (
