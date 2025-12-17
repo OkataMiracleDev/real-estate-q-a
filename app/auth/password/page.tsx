@@ -1,11 +1,10 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { signIn } from "next-auth/react";
-import Link from "next/link";
 
-export default function PasswordPage() {
+function PasswordContent() {
   const search = useSearchParams();
   const router = useRouter();
   const email = search.get("email") || "";
@@ -32,7 +31,7 @@ export default function PasswordPage() {
       });
 
       // 3. Route to main page
-      router.push("/");
+      window.location.href = "/";
     } catch (error) {
       console.error("Submit error:", error);
     }
@@ -105,49 +104,24 @@ export default function PasswordPage() {
               </div>
 
               {/* Show Password Checkbox */}
-              <div className="flex items-center mb-12">
+              <div className="flex items-center gap-2 mb-12">
                 <input
                   type="checkbox"
                   id="showPassword"
                   checked={showPassword}
                   onChange={(e) => setShowPassword(e.target.checked)}
-                  className="w-[18px] h-[18px] mr-3 rounded-sm border-2 border-[#8e918f] bg-transparent checked:bg-[#a8c7fa] checked:border-[#a8c7fa] appearance-none cursor-pointer relative checked:after:content-['✓'] checked:after:text-[#062e6f] checked:after:absolute checked:after:left-[1px] checked:after:top-[-3px] checked:after:font-bold"
+                  className="w-4 h-4 rounded border-gray-600 bg-transparent text-[#a8c7fa] focus:ring-[#a8c7fa] focus:ring-offset-[#1e1f20]"
                 />
                 <label
                   htmlFor="showPassword"
-                  className="text-sm text-[#e3e3e3] cursor-pointer"
+                  className="text-sm text-[#e3e3e3]"
                 >
                   Show password
                 </label>
               </div>
 
-              {/* Disclaimer */}
-              <div className="text-sm text-[#e3e3e3] mb-12">
-                Before using this app, you can review realestate-q/a&apos;s{" "}
-                <a
-                  href="#"
-                  className="text-[#a8c7fa] font-medium hover:underline"
-                >
-                  privacy policy
-                </a>{" "}
-                and{" "}
-                <a
-                  href="#"
-                  className="text-[#a8c7fa] font-medium hover:underline"
-                >
-                  terms of service
-                </a>
-                .
-              </div>
-
               {/* Action Buttons */}
-              <div className="flex items-center justify-between mt-auto">
-                <button
-                  type="button"
-                  className="text-[#a8c7fa] text-sm font-medium px-2 py-2 rounded hover:bg-[#a8c7fa]/10 transition-colors"
-                >
-                  Forgot password?
-                </button>
+              <div className="flex items-center justify-end gap-2">
                 <button
                   type="submit"
                   className="bg-[#a8c7fa] text-[#062e6f] text-sm font-medium px-6 py-2.5 rounded-[20px] hover:bg-[#a8c7fa]/90 transition-colors"
@@ -159,26 +133,14 @@ export default function PasswordPage() {
           </div>
         </div>
       </div>
-
-      {/* Footer */}
-      <footer className="w-full max-w-[1040px] mt-4 flex flex-col md:flex-row items-center justify-between text-xs text-[#e3e3e3] px-4 md:px-0">
-        <div className="mb-4 md:mb-0">
-          <select className="bg-transparent border-none outline-none cursor-pointer hover:bg-[#ffffff]/10 rounded p-1">
-            <option className="bg-[#1e1f20]">English (United States)</option>
-          </select>
-        </div>
-        <div className="flex gap-8">
-          <a href="#" className="hover:bg-[#ffffff]/10 rounded px-2 py-1">
-            Help
-          </a>
-          <a href="#" className="hover:bg-[#ffffff]/10 rounded px-2 py-1">
-            Privacy
-          </a>
-          <a href="#" className="hover:bg-[#ffffff]/10 rounded px-2 py-1">
-            Terms
-          </a>
-        </div>
-      </footer>
     </div>
+  );
+}
+
+export default function PasswordPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#0f0f0f]" />}>
+      <PasswordContent />
+    </Suspense>
   );
 }
